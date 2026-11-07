@@ -2,6 +2,11 @@
 
 A Flask web dashboard and energy manager that connects a Solis PV inverter with a Hoval UltraSource Comfort 8 heat pump (TopTronic E controller).
 
+## Supported Devices
+
+- Solis S6-EH3P(15-20)K-H 3-phase hybrid inverter
+- Hoval Ultrasource Comfort B heatpump with TopTronic® E controller and a Hoval Gateway Module for Modbus access
+
 ## What the application does
 
 The application runs one background control loop and one web server.
@@ -71,6 +76,10 @@ Then open `http://<host>:5000/` in a browser.
 - The application is not a certified safety system. It changes the heat pump operating mode automatically, so check the behavior on your system before enabling writes.
 - Keep `HOVAL_READ_ONLY = True` while you test readings.
 - Verify each Hoval datapoint on your own installation. Some values depend on the sensors that are actually connected.
+
+## Developer note
+
+This application was heavily developed with the help of a KI. 
 
 ## License
 
