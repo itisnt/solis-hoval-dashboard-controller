@@ -82,6 +82,13 @@ function render(state) {
   setValue("bv-soc", solis.battery_soc_pct, "%");
   setBar("bv-soc-bar", solis.battery_soc_pct);
 
+  for (const i of [1, 2, 3, 4]) {
+    setValue(`pv${i}-power`, solis[`pv${i}_power_w`], "W");
+    const volt = solis[`pv${i}_voltage_v`];
+    const amp = solis[`pv${i}_current_a`];
+    setText(`pv${i}-detail`, volt == null ? "—" : `${volt} V · ${amp} A`);
+  }
+
   $("ctl-toggle").checked = hoval.overloading;
   setText("ctl-state", hoval.overloading ? "EIN" : "AUS");
   setColor("ctl-state", hoval.overloading ? "c-good" : "c-off");

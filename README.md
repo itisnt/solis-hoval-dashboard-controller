@@ -6,6 +6,7 @@ A Flask web dashboard and energy manager that connects a Solis PV inverter with 
 
 - Solis S6-EH3P(15-20)K-H 3-phase hybrid inverter
 - Hoval Ultrasource Comfort B heatpump with TopTronic® E controller and a Hoval Gateway Module for Modbus access
+- Battery connected to the inverter (doesn't matter what kind of battery, is controlled through the inverter)
 
 ## What the application does
 

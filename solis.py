@@ -12,6 +12,14 @@ REGISTER_BLOCKS = [
         ("pv_energy_total_kwh", 0, "u32", 1),
     ]),
     (33049, 10, [
+        ("pv1_voltage_v", 0, "u16", 0.1),
+        ("pv1_current_a", 1, "u16", 0.1),
+        ("pv2_voltage_v", 2, "u16", 0.1),
+        ("pv2_current_a", 3, "u16", 0.1),
+        ("pv3_voltage_v", 4, "u16", 0.1),
+        ("pv3_current_a", 5, "u16", 0.1),
+        ("pv4_voltage_v", 6, "u16", 0.1),
+        ("pv4_current_a", 7, "u16", 0.1),
         ("pv_total_dc_power_w", 8, "u32", 1),
     ]),
     (33071, 26, [
@@ -76,6 +84,8 @@ async def read_solis_data():
         for address, count, fields in REGISTER_BLOCKS:
             regs = await _read_block(client, address, count)
             data.update(_decode_fields(regs, fields))
+        for i in range(1, 5):
+            data[f"pv{i}_power_w"] = round(data[f"pv{i}_voltage_v"] * data[f"pv{i}_current_a"], 1)
         return data
     except (ModbusException, OSError) as e:
         logging.error(f"Fehler bei Solis-Abfrage: {e}")
