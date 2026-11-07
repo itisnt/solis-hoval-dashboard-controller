@@ -1,0 +1,7 @@
+Nimm das Script solis_pv_hoval_regelung.py als Vorlage und baue daraus eine Python Flask Applikation die folgendes beinhaltet
+
+Den Hauptloop des original Scripts, dass die Daten aus dem Solis Wecheselrichter ausliest, in eine InfluxDB liest und je nach PV überschuss die Hovalheizung ansteuert.
+
+Visualisiere zusätzlich alles auf einer Webseite. Also die Daten aus dem Solis Wechselrichter und den Status der Hoval Heizung. Baue es so, dass wir später noch weitere Daten aus der Hoval Heizung einbauen können.
+
+Verwende Python 3.15 und die aktuellste Version von pymodbus 3.12.2

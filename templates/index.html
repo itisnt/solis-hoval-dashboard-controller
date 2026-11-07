@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solis PV &amp; Hoval Heizung</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Solis PV &amp; Hoval Heizung</h1>
+    <div class="sub">Hybrid-Energiemanager · SG-Ready Überladung</div>
+  </div>
+  <div class="header-right">
+    <div class="conn-badge"><span class="conn-dot" id="solis-dot"></span><span id="solis-text">Solis…</span></div>
+    <div class="conn-badge"><span class="conn-dot" id="hoval-dot"></span><span id="hoval-text">Hoval…</span></div>
+    <div class="refresh-info">Solis: <span id="last-solis">—</span> · Hoval: <span id="last-hoval">—</span></div>
+  </div>
+</header>
+
+<div class="status-bar">
+  <div class="status-pill"><span class="label">PV</span><span class="val c-power" id="pill-pv">—</span></div>
+  <div class="status-pill"><span class="label">Netz</span><span class="val" id="pill-grid">—</span></div>
+  <div class="status-pill"><span class="label">Batterie</span><span class="val c-good" id="pill-soc">—</span></div>
+  <div class="status-pill"><span class="label">Haus</span><span class="val" id="pill-load">—</span></div>
+  <div class="status-pill"><span class="label">Überladen</span><span class="val c-off" id="pill-overload">—</span></div>
+</div>
+
+<div class="main">
+
+  <div class="error-banner" id="error-banner"></div>
+
+  <div class="grid-5">
+    <div class="card">
+      <div class="card-header">PV</div>
+      <div class="card-body big-val">
+        <div class="num c-power" id="bv-pv">—</div>
+        <div class="lbl">Leistung</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Hausverbrauch</div>
+      <div class="card-body big-val">
+        <div class="num" id="bv-load">—</div>
+        <div class="lbl">Leistung</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Netz</div>
+      <div class="card-body big-val">
+        <div class="num" id="bv-grid">—</div>
+        <div class="lbl">+ Bezug / − Einspeisung</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Batterie</div>
+      <div class="card-body big-val">
+        <div class="num" id="bv-bat">—</div>
+        <div class="lbl">+ Laden / − Entladen</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Batterie-Ladestand</div>
+      <div class="card-body big-val">
+        <div class="num c-good" id="bv-soc">—</div>
+        <div class="bar-wrap"><div class="bar-fill" id="bv-soc-bar"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-header">Hybrid-Regelung</div>
+      <div class="card-body switch-card">
+        <div class="switch-name">Überladen (SG-Ready)</div>
+        <label class="toggle">
+          <input type="checkbox" id="ctl-toggle" disabled>
+          <span class="toggle-slider"></span>
+        </label>
+        <div class="switch-state" id="ctl-state">—</div>
+      </div>
+      <div class="card-body">
+        <div class="row"><span class="lbl">Gesamtüberschuss</span><span class="v c-power" id="ctl-surplus">—</span></div>
+        <div class="row"><span class="lbl">Batterie-Ladeleistung</span><span class="v" id="ctl-bat">—</span></div>
+        <div class="row"><span class="lbl">Batterie-Ladestand</span><span class="v c-good" id="ctl-soc">—</span></div>
+        <div class="row"><span class="lbl">Überladen seit</span><span class="v" id="ctl-since">—</span></div>
+        <div class="row"><span class="lbl">Letzte Berechnung</span><span class="v" id="ctl-updated">—</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">Solis Wechselrichter</div>
+      <div class="card-body">
+        <div class="row"><span class="lbl">AC-Leistung</span><span class="v c-power" id="sol-ac">—</span></div>
+        <div class="row"><span class="lbl">Temperatur</span><span class="v c-temp" id="sol-temp">—</span></div>
+        <div class="row"><span class="lbl">Status</span><span class="v" id="sol-status">—</span></div>
+        <div class="row"><span class="lbl">Betriebsstatus</span><span class="v" id="sol-op">—</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">Solis Energie gesamt</div>
+      <div class="card-body">
+        <div class="row"><span class="lbl">PV-Ertrag</span><span class="v c-power" id="sol-pv-e">—</span></div>
+        <div class="row"><span class="lbl">Batterie geladen</span><span class="v" id="sol-bat-in">—</span></div>
+        <div class="row"><span class="lbl">Batterie entladen</span><span class="v" id="sol-bat-out">—</span></div>
+        <div class="row"><span class="lbl">Netzbezug</span><span class="v" id="sol-imp">—</span></div>
+        <div class="row"><span class="lbl">Netzeinspeisung</span><span class="v" id="sol-exp">—</span></div>
+        <div class="row"><span class="lbl">Verbrauch</span><span class="v" id="sol-load-e">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-5">
+    <div class="card">
+      <div class="card-header">Wärmeerzeuger Modulation</div>
+      <div class="card-body big-val">
+        <div class="num c-power"><span id="hv-mod">—</span></div>
+        <div class="unit">%</div>
+        <div class="bar-wrap"><div class="bar-fill hot" id="hv-mod-bar"></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Temperaturen</div>
+      <div class="card-body">
+        <div class="row"><span class="lbl">Vorlauf Ist</span><span class="v c-temp" id="hv-vl">—</span></div>
+        <div class="row"><span class="lbl">Vorlauf Soll</span><span class="v c-temp" id="hv-vl-soll">—</span></div>
+        <div class="row"><span class="lbl">Rücklauf</span><span class="v c-temp" id="hv-rl">—</span></div>
+        <div class="row"><span class="lbl">Außen</span><span class="v c-temp" id="hv-af">—</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Leistung</div>
+      <div class="card-body">
+        <div class="row"><span class="lbl">Thermisch</span><span class="v c-power" id="hv-th">—</span></div>
+        <div class="row"><span class="lbl">Elektrisch</span><span class="v c-power" id="hv-el">—</span></div>
+        <div class="row"><span class="lbl">Smart Grid verfügbar</span><span class="v" id="hv-sg-avail">—</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Betrieb</div>
+      <div class="card-body">
+        <div class="row"><span class="lbl">Betriebsstunden</span><span class="v" id="hv-bsh">—</span></div>
+        <div class="row"><span class="lbl">Schaltzyklen</span><span class="v" id="hv-szy">—</span></div>
+        <div class="row"><span class="lbl">Betriebsmeldung</span><span class="v" id="hv-meldung">—</span></div>
+        <div class="row"><span class="lbl">Status</span><span class="v" id="hv-status">—</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Energie gesamt</div>
+      <div class="card-body">
+        <div class="row"><span class="lbl">Wärmemenge</span><span class="v c-power" id="hv-en-th">—</span></div>
+        <div class="row"><span class="lbl">Elektrisch</span><span class="v c-power" id="hv-en-el">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-header">Heizkreis 1</div>
+      <div class="card-body">
+        <div class="row"><span class="lbl">Vorlauf Ist</span><span class="v c-temp" id="hk1-vl">—</span></div>
+        <div class="row"><span class="lbl">Vorlauf Soll</span><span class="v c-temp" id="hk1-vl-soll">—</span></div>
+        <div class="row"><span class="lbl">Raum Soll</span><span class="v c-temp" id="hk1-raum-soll">—</span></div>
+        <div class="row"><span class="lbl">Rücklauf</span><span class="v c-temp" id="hk1-rl">—</span></div>
+        <div class="row"><span class="lbl">Pumpe</span><span class="v" id="hk1-pumpe">—</span></div>
+        <div class="row"><span class="lbl">Betriebswahl</span><span class="v" id="hk1-mode">—</span></div>
+        <div class="row"><span class="lbl">Status</span><span class="v" id="hk1-status">—</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">Warmwasser</div>
+      <div class="card-body">
+        <div class="row"><span class="lbl">Ist</span><span class="v c-temp" id="ww-ist">—</span></div>
+        <div class="row"><span class="lbl">Soll</span><span class="v c-temp" id="ww-soll">—</span></div>
+        <div class="row"><span class="lbl">Ladepumpe</span><span class="v" id="ww-pumpe">—</span></div>
+        <div class="row"><span class="lbl">Status</span><span class="v" id="ww-status">—</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">Smart Grid</div>
+      <div class="card-body">
+        <div class="row"><span class="lbl">Betriebsart</span><span class="v" id="sg-mode">—</span></div>
+        <div class="row"><span class="lbl">Auslöser</span><span class="v" id="sg-trigger">—</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
