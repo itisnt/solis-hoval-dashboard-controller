@@ -78,7 +78,13 @@ async def _control_loop(store):
                 store.set("control", total_surplus_w=total_surplus_w, bat_charge_w=bat_charge,
                           soc=soc, updated=current_time)
 
-                logging.info(f"SoC: {soc}% | Netz: {data['grid_power_w']}W | Bat-Laden: {bat_charge}W | Total Überschuss: {total_surplus_w}W")
+                logging.info(f"Battery Charge Level: {soc}%")
+                logging.info(f"Grid                : {data['grid_power_w']}W")
+                logging.info(f"Grid New            : {data['grid_power_w_new']}W")
+                logging.info(f"Bat Laden/Entladen  : {bat_charge}W")
+                logging.info(f"Total Überschuss    : {total_surplus_w}W")
+                logging.info(f"net_surplus         : {net_surplus}")
+                logging.info(f"battery_power_w     : {data['battery_power_w']}W")
 
                 if not is_overloading:
                     if total_surplus_w >= TRIGGER_SURPLUS_W and soc >= BATTERY_MIN_SOC:

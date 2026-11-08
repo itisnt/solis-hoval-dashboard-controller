@@ -47,6 +47,9 @@ REGISTER_BLOCKS = [
         ("grid_export_total_kwh", 12, "u32", 1),
         ("load_total_kwh", 16, "u32", 1),
     ]),
+    (33263, 2, [
+        ("grid_power_w_new", 0, "s32", 1),
+    ]),
 ]
 
 
