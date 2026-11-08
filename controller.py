@@ -57,6 +57,7 @@ async def _control_loop(store):
 
     with InfluxDBClient(host=INFLUX_HOST, port=INFLUX_PORT, database=INFLUX_DATABASE) as influx:
         while True:
+            delay_start_time = time.perf_counter()
             data = await read_solis_data()
             current_time = time.time()
 
@@ -111,7 +112,14 @@ async def _control_loop(store):
                 start_time = None
 
             await _publish_hoval(store, is_overloading, start_time, current_time)
-            await asyncio.sleep(INTERVAL_SEC)
+
+            elapsed_time = time.perf_counter() - delay_start_time
+            sleep_time = INTERVAL_SEC - elapsed_time
+            # await asyncio.sleep(INTERVAL_SEC)
+            if sleep_time > 0:
+                await asyncio.sleep(sleep_time)
+            else:
+                logging.warning("Controller While-Loop took longer than 60s")
 
 
 async def _run(store):

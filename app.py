@@ -5,6 +5,7 @@ from flask import Flask, jsonify, render_template
 from config import WEB_HOST, WEB_PORT
 from controller import Store, start_worker
 
+# logging.basicConfig(level=logging.DEBUG, format="%(asctime)s [%(levelname)s] %(message)s")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
 app = Flask(__name__)

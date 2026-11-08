@@ -33,6 +33,7 @@ REGISTER_BLOCKS = [
     ]),
     (33126, 23, [
         ("grid_power_w", 4, "s32", 1),
+        ("battery_charge_direction", 9, "u16", 1),
         ("battery_soc_pct", 13, "u16", 1),
         ("household_load_w", 21, "u16", 1),
     ]),
@@ -86,6 +87,11 @@ async def read_solis_data():
             data.update(_decode_fields(regs, fields))
         for i in range(1, 5):
             data[f"pv{i}_power_w"] = round(data[f"pv{i}_voltage_v"] * data[f"pv{i}_current_a"], 1)
+
+        # 0 = Battery wird geladen, 1 = Batterie wird entladen
+        if data["battery_charge_direction"] == 1:
+            data["battery_power_w"] = (data["battery_power_w"]) * -1
+
         return data
     except (ModbusException, OSError) as e:
         logging.error(f"Fehler bei Solis-Abfrage: {e}")
